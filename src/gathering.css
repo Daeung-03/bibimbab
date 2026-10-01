@@ -1,0 +1,103 @@
+.gathering-page { width: min(980px, calc(100% - 48px)); margin: 30px auto 80px; }
+.gathering-footer { text-align: center; padding: 0 20px 32px; color: #858b7d; font-size: 12px; }
+.create-layout { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 65px; padding-top: 36px; }
+.create-copy h1 { font-size: 48px; letter-spacing: -2.6px; line-height: 1.25; }
+.create-copy h1 > span { color: #e85837; }
+.create-copy > p { color: #737b6d; font-size: 15px; line-height: 1.9; margin-top: 23px; }
+.create-steps { display: grid; gap: 18px; list-style: none; padding: 0; margin: 36px 0 0; }
+.create-steps li { display: flex; align-items: center; gap: 13px; font-size: 14px; font-weight: 600; }
+.create-steps li > span { display: grid; place-items: center; width: 33px; height: 33px; border-radius: 11px; background: #f7e5d4; color: #b86c45; font-size: 11px; }
+.create-steps li:nth-child(2) > span { background: #f5edcc; color: #998036; }
+.create-steps li:nth-child(3) > span { background: #e5ebda; color: #6d8052; }
+.gathering-card { background: #fffdf7; border: 1px solid #e5e1d2; border-radius: 18px; padding: 27px; }
+.gathering-card h2 { font-size: 22px; letter-spacing: -.8px; }
+.gathering-card fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.gathering-card label { display: block; font-size: 12px; font-weight: 650; margin: 21px 0 8px; }
+.gathering-card input { display: block; width: 100%; min-width: 0; height: 48px; border: 1px solid #d9d9cb; border-radius: 9px; background: #fbfaf3; color: #29392f; padding: 10px 12px; font-size: 16px; }
+.gathering-card input::placeholder { color: #959b8c; font-size: 13px; }
+.gathering-card .button { width: 100%; gap: 9px; font-size: 13px; }
+.gathering-card fieldset .button { margin-top: 20px; }
+.gathering-card button:disabled { cursor: default; }
+.card-description { color: #767e6e; font-size: 13px; line-height: 1.9; margin-top: 10px; }
+.gathering-small-note { font-size: 11px; color: #898e7f; line-height: 1.8; margin-top: 17px; }
+.form-bowl { display: block; font-size: 35px; margin-bottom: 15px; }
+.create-form { box-shadow: 0 12px 25px #62543909; }
+.create-form h2 { font-size: 26px; }
+.room-heading { margin-bottom: 28px; }
+.room-heading h1 { font-size: clamp(28px, 4vw, 42px); line-height: 1.3; letter-spacing: -1.6px; overflow-wrap: anywhere; }
+.room-heading > p { font-size: 14px; color: #7e8375; margin-top: 13px; }
+.room-progress { display: grid; grid-template-columns: repeat(3, 1fr); list-style: none; padding: 0; margin: 0 0 31px; gap: 10px; }
+.room-progress li { border-top: 2px solid #deded0; padding-top: 13px; display: flex; align-items: center; gap: 9px; font-size: 12px; color: #929989; font-weight: 600; }
+.room-progress li > span { font-size: 10px; }
+.room-progress li.current { border-color: #e85837; color: #b65133; }
+.room-layout { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); align-items: start; gap: 26px; }
+.room-main, .room-sidebar { display: grid; gap: 20px; min-width: 0; }
+.room-connection { margin: 0 0 18px; font-size: 12px; }
+.room-mission { padding: 25px; min-height: 274px; }
+.room-mission .mission-content h2 { white-space: pre-line; font-size: 30px; font-weight: 850; line-height: 1.45; }
+.room-mission .mission-content p { font-size: 12px; }
+.room-mission .mission-card-top > span:first-child { font-size: 11px; letter-spacing: .5px; }
+.room-mission .mission-card-bottom { font-size: 11px; }
+.waiting-card { padding: 35px 27px; }
+.waiting-symbol { display: block; font-size: 40px; color: #dba052; margin-bottom: 20px; }
+.waiting-card .button { margin-top: 26px; }
+.waiting-message { color: #6d805b; background: #edf0e3; border-radius: 9px; padding: 13px; font-size: 12px; line-height: 1.8; margin-top: 20px; }
+.invite-card input { font-size: 11px; height: 42px; margin-top: 17px; color: #778167; }
+.invite-copy { background: #e6ecd9; color: #4c6538; min-height: 46px; margin-top: 9px; }
+.invite-copy:hover { background: #dce5ca; }
+.members-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.members-title h2 { font-size: 17px; }
+.members-title > span { font-size: 11px; color: #808776; white-space: nowrap; }
+.room-members { list-style: none; padding: 0; margin: 19px 0 0; display: grid; gap: 15px; }
+.room-members li { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.member-avatar { width: 37px; height: 37px; border-radius: 13px; flex-shrink: 0; display: grid; place-items: center; font-size: 14px; font-weight: 750; }
+.room-members li > div { min-width: 0; }
+.room-members strong { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: 13px; font-weight: 650; overflow-wrap: anywhere; }
+.room-members strong > small { background: #f0ede2; color: #858370; padding: 2px 5px; border-radius: 4px; font-size: 9px; font-weight: 500; }
+.room-members li > div > span { display: block; font-size: 11px; color: #89917d; margin-top: 4px; overflow-wrap: anywhere; }
+.finish-card h2 { font-size: 21px; }
+.finish-card .button { margin-top: 19px; }
+.saved-message { color: #63784c; font-size: 12px; margin-top: 14px; line-height: 1.7; }
+.room-expiry { color: #8a9081; font-size: 10px; line-height: 1.95; margin-inline: 3px; }
+.room-receipt { padding: 30px; margin-bottom: 10px; }
+.room-receipt .receipt-heading h2 { font-size: 25px; }
+.room-receipt .receipt-heading p { font-size: 11px; }
+.shared-ingredients { display: grid; gap: 10px; margin: 20px 0; }
+.shared-ingredients > div { display: flex; justify-content: space-between; gap: 20px; font-size: 13px; }
+.shared-ingredients span { color: #7b8372; overflow-wrap: anywhere; }
+.shared-ingredients strong { text-align: right; overflow-wrap: anywhere; font-weight: 650; }
+.room-receipt .evaluation p { font-size: 16px; }
+.room-receipt .score-row { font-size: 13px; }
+.room-receipt .report-awards span { font-size: 11px; }
+.room-receipt .report-awards strong { font-size: 15px; }
+.room-receipt .report-awards > div + div { margin-top: 21px; }
+.new-gathering { font-size: 12px; }
+.empty-room { width: min(470px, 100%); margin: 50px auto; text-align: center; }
+.empty-room > span { display: block; font-size: 40px; margin-bottom: 17px; }
+.empty-room p { color: #7b8372; font-size: 13px; line-height: 1.9; margin: 18px 0 26px; }
+.gathering-card label.sr-only { position: absolute; margin: -1px; }
+
+@media (max-width: 760px) {
+  .gathering-page { width: calc(100% - 40px); margin-top: 20px; margin-bottom: 55px; }
+  .create-layout { grid-template-columns: 1fr; gap: 30px; padding-top: 0; max-width: 480px; margin-inline: auto; }
+  .create-copy h1 { font-size: 38px; letter-spacing: -2px; }
+  .create-copy > p { font-size: 13px; margin-top: 18px; }
+  .create-steps { gap: 11px; margin-top: 22px; }
+  .create-steps li { font-size: 12px; }
+  .create-steps li > span { width: 27px; height: 27px; border-radius: 8px; }
+  .gathering-card { padding: 23px; }
+  .room-heading h1 { font-size: 30px; letter-spacing: -1.3px; }
+  .room-heading > p { font-size: 12px; line-height: 1.8; }
+  .room-progress { gap: 8px; margin-bottom: 25px; }
+  .room-progress li { font-size: 10px; gap: 5px; line-height: 1.6; align-items: flex-start; }
+  .room-progress li > span { font-size: 9px; margin-top: 1px; }
+  .room-layout { grid-template-columns: 1fr; gap: 20px; max-width: 520px; margin-inline: auto; }
+  .room-main, .room-sidebar { gap: 18px; }
+  .room-mission { padding: 24px; }
+  .room-mission .mission-content h2 { font-size: 28px; }
+  .gathering-card h2 { font-size: 21px; }
+  .members-title h2 { font-size: 17px; }
+  .waiting-card { padding-block: 27px; }
+  .room-receipt { padding: 27px 23px; }
+  .room-receipt .receipt-heading h2 { font-size: 23px; }
+}

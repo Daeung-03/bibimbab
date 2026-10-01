@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: bibim-random-api
+    runtime: node
+    plan: free
+    numInstances: 1
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: LINER_API_KEY
+        sync: false
+      - key: LINER_MODEL
+        value: liner-mark-1.1
+      - key: ALLOWED_ORIGINS
+        sync: false

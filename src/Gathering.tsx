@@ -65,7 +65,7 @@ export function CreateGathering() {
 
 let pendingSession: { roomId: string; token: string } | null = null
 
-export function GatheringRoom({ roomId }: { roomId: string }) {
+export function GatheringRoom({ roomId, showMissions = false }: { roomId: string; showMissions?: boolean }) {
   const [session, setSession] = useState<RoomSession | null>(() => pendingSession?.roomId === roomId ? { token: pendingSession.token } : getSession(roomId))
   const [room, setRoom] = useState<RoomView | null>(null)
   const [connectionError, setConnectionError] = useState('')
@@ -164,17 +164,39 @@ export function GatheringRoom({ roomId }: { roomId: string }) {
   }
 
   const inviteUrl = `${location.origin}${location.pathname}#/room/${roomId}`
-  async function copyInvite() {
+  const missionsUrl = `${inviteUrl}/missions`
+  async function copyLink(url: string) {
     try {
-      await navigator.clipboard.writeText(inviteUrl)
+      await navigator.clipboard.writeText(url)
       setCopied(true)
       if (copyTimer.current) clearTimeout(copyTimer.current)
       copyTimer.current = setTimeout(() => setCopied(false), 2500)
-    } catch { setError('아래 초대 링크를 선택해서 직접 복사해주세요.') }
+    } catch { setError('링크를 복사하지 못했어요. 주소창에서 직접 복사해주세요.') }
   }
 
   if (missing) return <PageShell><div className="gathering-card empty-room"><span aria-hidden="true">🍚</span><h2>이 모임은 끝났어요.</h2><p>{connectionError}</p><a className="button button-primary" href="#/create">새 모임 만들기</a></div></PageShell>
   if (!room) return <PageShell><div className="gathering-card empty-room" aria-live="polite"><span aria-hidden="true">🍚</span><h2>{connectionError ? '잠깐, 연결을 확인할게요.' : '모임에 들어가는 중…'}</h2><p>{connectionError || '첫 접속은 조금 오래 걸릴 수 있어요.'}</p>{connectionError && <button className="button button-dark" onClick={() => setRetry((v) => v + 1)}>다시 연결하기</button>}</div></PageShell>
+
+  if (showMissions) return <PageShell>
+    <div className="mission-reveal-page">
+      <a className="reveal-back" href={`#/room/${roomId}`}>← 비빔밥 리포트로 돌아가기</a>
+      <div className="reveal-heading"><span className="section-kicker">MISSION REVEAL</span><h1>{room.title}<br /><span>미션 공개!</span></h1><p>{room.phase === 'completed' ? '각자의 비밀 미션과 직접 고른 재료를 함께 확인해요.' : '리포트가 완성되면 모두의 미션이 이곳에 공개돼요.'}</p></div>
+      {connectionError && <p className="error-message" role="status">{connectionError}</p>}
+      {error && <p className="error-message" role="alert">{error}</p>}
+      {room.phase === 'completed' ? <>
+        <div className="mission-reveal-grid">{room.members.map((member, index) => {
+          const assigned = member.missionIndex === null ? null : missions[member.missionIndex]
+          return <article className={`reveal-card ${assigned?.color || 'green'}`} key={member.id}>
+            <div className="reveal-card-top"><span className="reveal-number">{String(index + 1).padStart(2, '0')}</span><span className="reveal-name">{member.name}{member.id === room.me?.id ? ' · 나' : ''}</span></div>
+            <div className="reveal-mission"><span>{assigned?.category || '랜덤 미션'}</span><h2>{assigned?.title || '미션을 확인할 수 없어요.'}</h2><p>{assigned?.hint}</p></div>
+            <div className="reveal-ingredient"><span>가져온 재료</span><strong>{member.ingredient}</strong></div>
+          </article>
+        })}</div>
+        <div className="reveal-actions"><button className="button button-dark" type="button" onClick={() => { void copyLink(missionsUrl) }}>{copied ? '✓ 공개 링크를 복사했어요' : '미션 공개 링크 복사하기'}</button><span className="sr-only" role="status">{copied ? '미션 공개 링크 복사 완료' : ''}</span></div>
+      </> : <div className="gathering-card reveal-locked"><span aria-hidden="true">🔒</span><h2>아직 공개 전이에요.</h2><p>모임장이 리포트를 만들면 모든 참가자의 미션을 볼 수 있어요.</p></div>}
+      <p className="room-expiry reveal-expiry">모임 정보는 생성 후 24시간 동안 유지되며, 서버가 다시 시작되면 사라져요.</p>
+    </div>
+  </PageShell>
 
   const me = room.members.find((m) => m.id === room.me?.id)
   const mission = room.me?.missionIndex != null ? missions[room.me.missionIndex] : null
@@ -197,10 +219,10 @@ export function GatheringRoom({ roomId }: { roomId: string }) {
           <article className={`active-mission room-mission ${mission.color}`}><div className="mission-card-top"><span><span className="status-dot" /> {me?.name}님의 비밀 미션</span><span aria-hidden="true">✳</span></div><div className="mission-content"><span className="mission-category">{mission.category}</span><h2>{mission.title}</h2><p>{mission.hint}</p></div><div className="mission-card-bottom"><span>재료는 직접 골라주세요!</span><span>친구들에겐 비밀</span></div></article>
           <form className="gathering-card ingredient-form" onSubmit={(e) => { e.preventDefault(); if (!ingredient.trim()) return setError('가져온 재료를 입력해주세요.'); void act('ingredient', { ingredient: ingredient.trim() }) }}><h2>나는 이 재료를 가져왔어요.</h2><p className="card-description">모두 모인 뒤 리포트에서 함께 공개해요.</p><fieldset disabled={!!busy || generating}><label htmlFor="my-ingredient">내가 가져온 재료</label><input id="my-ingredient" value={ingredient} maxLength={40} required placeholder="예: 감자칩" onChange={(e) => { setIngredient(e.target.value); setSaved(false) }} /><button className="button button-dark" type="submit">{busy === 'ingredient' ? '재료를 저장하는 중…' : me?.hasIngredient ? '내 재료 수정하기' : '내 재료 제출하기'}</button></fieldset>{saved && <p className="saved-message" role="status">✓ 재료를 저장했어요. 친구들의 입력을 기다려주세요.</p>}</form>
         </>}
-        {room.phase === 'completed' && room.report && <section className="receipt room-receipt" aria-labelledby="shared-report-title" ref={reportRef} tabIndex={-1}><div className="receipt-top"><span className="receipt-logo">비빔랜덤</span><span className="mini-label">OUR BIBIM REPORT</span></div><div className="receipt-heading"><span className="report-bowl" aria-hidden="true">🍚</span><h2 id="shared-report-title">오늘의 비빔밥 리포트</h2><p>{room.members.length}명의 취향이 한 그릇에 모인 날</p></div><div className="receipt-rule" /><div className="shared-ingredients">{room.members.map((m) => <div key={m.id}><span>{m.name}</span><strong>{m.ingredient}</strong></div>)}</div><div className="evaluation"><span className="mini-label">✦ AI의 한마디</span><p>“{room.report.evaluation}”</p></div><div className="score-row"><span>재료 궁합 점수</span><span><strong>{room.report.score}</strong><small> / 100</small></span></div><div className="score-track" role="meter" aria-label="재료 궁합 점수" aria-valuenow={room.report.score} aria-valuemin={0} aria-valuemax={100}><i style={{ width: `${room.report.score}%` }} /></div><div className="report-awards"><div><span>🏆 오늘의 MVP</span><strong>{room.report.mvp}</strong></div><div><span>🚨 오늘의 가장 위험한 선택</span><strong>{room.report.riskyCombination}</strong></div></div><div className="receipt-rule" /><p className="receipt-ending">맛은 몰라도, 추억은 100점.</p><div className="barcode" aria-hidden="true" /></section>}
+        {room.phase === 'completed' && room.report && <><section className="receipt room-receipt" aria-labelledby="shared-report-title" ref={reportRef} tabIndex={-1}><div className="receipt-top"><span className="receipt-logo">비빔랜덤</span><span className="mini-label">OUR BIBIM REPORT</span></div><div className="receipt-heading"><span className="report-bowl" aria-hidden="true">🍚</span><h2 id="shared-report-title">오늘의 비빔밥 리포트</h2><p>{room.members.length}명의 취향이 한 그릇에 모인 날</p></div><div className="receipt-rule" /><div className="shared-ingredients">{room.members.map((m) => <div key={m.id}><span>{m.name}</span><strong>{m.ingredient}</strong></div>)}</div><div className="evaluation"><span className="mini-label">✦ AI의 한마디</span><p>“{room.report.evaluation}”</p></div><div className="score-row"><span>재료 궁합 점수</span><span><strong>{room.report.score}</strong><small> / 100</small></span></div><div className="score-track" role="meter" aria-label="재료 궁합 점수" aria-valuenow={room.report.score} aria-valuemin={0} aria-valuemax={100}><i style={{ width: `${room.report.score}%` }} /></div><div className="report-awards"><div><span>🏆 오늘의 MVP</span><strong>{room.report.mvp}</strong></div><div><span>🚨 오늘의 가장 위험한 선택</span><strong>{room.report.riskyCombination}</strong></div></div><div className="receipt-rule" /><p className="receipt-ending">맛은 몰라도, 추억은 100점.</p><div className="barcode" aria-hidden="true" /></section><a className="button button-primary reveal-entry" href={`#/room/${roomId}/missions`}>친구들의 미션 공개 보기 <span aria-hidden="true">→</span></a></>}
       </section>
       <aside className="room-sidebar">
-        <section className="gathering-card invite-card"><h2>{room.phase === 'waiting' ? '친구들을 불러볼까요?' : '우리 모임 링크'}</h2><p className="card-description">{room.phase === 'waiting' ? '링크를 보내면 이름만 입력해서 참가해요.' : '같은 링크에서 모임과 리포트를 볼 수 있어요.'}</p><label className="sr-only" htmlFor="invite-link">모임 초대 링크</label><input id="invite-link" readOnly value={inviteUrl} onFocus={(e) => e.target.select()} /><button className="button invite-copy" type="button" onClick={() => { void copyInvite() }}>{copied ? '✓ 링크를 복사했어요' : '초대 링크 복사하기'}</button><span className="sr-only" role="status">{copied ? '초대 링크 복사 완료' : ''}</span></section>
+        <section className="gathering-card invite-card"><h2>{room.phase === 'waiting' ? '친구들을 불러볼까요?' : '우리 모임 링크'}</h2><p className="card-description">{room.phase === 'waiting' ? '링크를 보내면 이름만 입력해서 참가해요.' : '같은 링크에서 모임과 리포트를 볼 수 있어요.'}</p><label className="sr-only" htmlFor="invite-link">모임 초대 링크</label><input id="invite-link" readOnly value={inviteUrl} onFocus={(e) => e.target.select()} /><button className="button invite-copy" type="button" onClick={() => { void copyLink(inviteUrl) }}>{copied ? '✓ 링크를 복사했어요' : '초대 링크 복사하기'}</button><span className="sr-only" role="status">{copied ? '초대 링크 복사 완료' : ''}</span></section>
         <section className="gathering-card members-card"><div className="members-title"><h2>함께 비빌 친구들</h2><span>{room.members.length} / 8명</span></div><ul className="room-members">{room.members.map((m, i) => <li key={m.id}><span className={`member-avatar ${['peach', 'yellow', 'green', 'blue'][i % 4]}`} aria-hidden="true">{Array.from(m.name)[0]}</span><div><strong>{m.name}{m.id === room.me?.id && <small>나</small>}{m.isHost && <small>모임장</small>}</strong><span>{room.phase === 'waiting' ? '참가 완료' : room.phase === 'completed' ? m.ingredient : m.hasIngredient ? '재료 제출 완료 ✓' : '재료 고르는 중'}</span></div></li>)}</ul></section>
         {room.phase === 'shopping' && <section className="gathering-card finish-card"><span className="section-kicker">THE FINAL MIX</span><h2>모두 가져왔나요?</h2><p className="card-description">재료 제출 <strong>{submittedCount} / {room.members.length}명</strong><br />다 모이면 비비고, 오늘의 리포트를 만들어요.</p>{room.me?.isHost ? <button className="button button-primary" disabled={!!busy || generating || submittedCount !== room.members.length} onClick={() => { void act('report') }}>{generating ? 'AI가 우리 조합을 상상하는 중…' : '함께 비비고 리포트 만들기'}</button> : <p className="waiting-message" role="status">{generating ? 'AI가 리포트를 만드는 중이에요…' : '모임장이 리포트를 만들면 함께 볼 수 있어요.'}</p>}<p className="gathering-small-note">AI 평가는 한 번만 생성하고 모두 함께 봐요.</p></section>}
         <p className="room-expiry">모임은 생성 후 24시간 동안 이용할 수 있어요.<br />새로고침해도 같은 브라우저라면 다시 참가할 수 있어요.<br />서버가 다시 시작되면 모임이 사라져요.</p>

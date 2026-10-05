@@ -168,7 +168,7 @@ export default function App() {
     return () => window.removeEventListener('hashchange', update)
   }, [])
   if (hash === '#/create') return <CreateGathering />
-  const roomRoute = hash.match(/^#\/room\/([a-f0-9]{32})$/)
-  if (roomRoute) return <GatheringRoom key={roomRoute[1]} roomId={roomRoute[1]} />
+  const roomRoute = hash.match(/^#\/room\/([a-f0-9]{32})(\/missions)?$/)
+  if (roomRoute) return <GatheringRoom key={`${roomRoute[1]}${roomRoute[2] || ''}`} roomId={roomRoute[1]} showMissions={!!roomRoute[2]} />
   return <LandingPage />
 }

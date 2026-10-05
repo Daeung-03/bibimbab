@@ -65,6 +65,7 @@ function view(room: Room, me?: Member): RoomView {
     members: room.members.map((m) => ({
       id: m.id, name: m.name, isHost: m.id === room.hostId, hasIngredient: !!m.ingredient,
       ingredient: room.phase === 'completed' || m.id === me?.id ? m.ingredient || null : null,
+      missionIndex: room.phase === 'completed' ? m.missionIndex : null,
     })),
     me: me ? { id: me.id, isHost: me.id === room.hostId, missionIndex: me.missionIndex } : null,
     report: room.report, generating: room.generating,

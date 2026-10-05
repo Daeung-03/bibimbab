@@ -72,6 +72,35 @@
 .room-receipt .report-awards strong { font-size: 15px; }
 .room-receipt .report-awards > div + div { margin-top: 21px; }
 .new-gathering { font-size: 12px; }
+.reveal-entry { width: 100%; font-size: 13px; }
+.mission-reveal-page { max-width: 800px; margin: 0 auto; }
+.reveal-back { display: inline-flex; align-items: center; min-height: 44px; color: #6c765e; font-size: 13px; font-weight: 650; }
+.reveal-heading { text-align: center; padding: 34px 0 38px; }
+.reveal-heading h1 { font-size: clamp(32px, 5vw, 47px); line-height: 1.32; letter-spacing: -2px; overflow-wrap: anywhere; }
+.reveal-heading h1 span { color: #e85837; }
+.reveal-heading p { color: #737b6d; font-size: 14px; line-height: 1.8; margin-top: 14px; }
+.mission-reveal-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.reveal-card { min-width: 0; min-height: 287px; display: flex; flex-direction: column; padding: 25px; border: 1px solid #e6e0cf; border-radius: 20px; background: #fffdf7; }
+.reveal-card.peach { background: #fff1e8; border-color: #f0d4bf; }
+.reveal-card.yellow { background: #fff8db; border-color: #e9dfac; }
+.reveal-card.green { background: #eff3df; border-color: #d8dfc1; }
+.reveal-card.blue { background: #e9f1f4; border-color: #d1e0e6; }
+.reveal-card-top { display: flex; align-items: center; gap: 12px; }
+.reveal-number { width: 35px; height: 35px; border-radius: 11px; display: grid; place-items: center; background: #ffffffaa; font-size: 11px; font-weight: 800; }
+.reveal-name { font-size: 14px; font-weight: 800; overflow-wrap: anywhere; }
+.reveal-mission { padding: 24px 0 20px; flex: 1; }
+.reveal-mission > span, .reveal-ingredient > span { font-size: 10px; color: #68725f; font-weight: 700; }
+.reveal-mission h2 { white-space: pre-line; font-size: 23px; line-height: 1.42; letter-spacing: -.8px; margin-top: 8px; overflow-wrap: anywhere; }
+.reveal-mission p { color: #68725f; font-size: 11px; line-height: 1.7; margin-top: 9px; }
+.reveal-ingredient { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; border-top: 1px solid #59694a30; padding-top: 15px; }
+.reveal-ingredient strong { font-size: 16px; text-align: right; overflow-wrap: anywhere; }
+.reveal-actions { text-align: center; margin: 30px 0 14px; }
+.reveal-actions .button { width: min(360px, 100%); }
+.reveal-locked { max-width: 500px; margin: 0 auto; text-align: center; }
+.reveal-locked > span { font-size: 34px; }
+.reveal-locked h2 { margin-top: 12px; }
+.reveal-locked p { color: #737b6d; font-size: 13px; line-height: 1.8; margin-top: 10px; }
+.reveal-expiry { text-align: center; margin-top: 30px; }
 .empty-room { width: min(470px, 100%); margin: 50px auto; text-align: center; }
 .empty-room > span { display: block; font-size: 40px; margin-bottom: 17px; }
 .empty-room p { color: #7b8372; font-size: 13px; line-height: 1.9; margin: 18px 0 26px; }
@@ -100,4 +129,10 @@
   .waiting-card { padding-block: 27px; }
   .room-receipt { padding: 27px 23px; }
   .room-receipt .receipt-heading h2 { font-size: 23px; }
+  .reveal-heading { padding: 25px 0 30px; }
+  .reveal-heading p { font-size: 12px; }
+  .mission-reveal-grid { grid-template-columns: 1fr; gap: 12px; max-width: 520px; margin-inline: auto; }
+  .reveal-card { min-height: 250px; padding: 23px; }
+  .reveal-mission { padding: 20px 0; }
+  .reveal-mission h2 { font-size: 21px; }
 }

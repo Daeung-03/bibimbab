@@ -18,6 +18,7 @@ export interface RoomMember {
   isHost: boolean
   hasIngredient: boolean
   ingredient: string | null
+  missionIndex: number | null
 }
 
 export interface RoomView {
